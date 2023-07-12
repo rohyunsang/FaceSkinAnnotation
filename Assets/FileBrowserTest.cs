@@ -12,7 +12,12 @@ public class FileBrowserTest : MonoBehaviour
 
     public string jsonString = "";
     public RawImage faceImage;
+    public GameObject jsonManager;
 
+    void Start()
+    {
+        //jsonManager 
+    }
     public void ShowFileBrowser()
     {
         // Set filters (optional)
@@ -98,10 +103,8 @@ public class FileBrowserTest : MonoBehaviour
                 byte[] bytes = FileBrowserHelpers.ReadBytesFromFile(FileBrowser.Result[0]);
 
                 jsonString = System.Text.Encoding.UTF8.GetString(bytes);
+                jsonManager.GetComponent<JsonParsing>().ParseJSONData(jsonString);
             }
-
-
-
 
             // Or, copy the first file to persistentDataPath
             string destinationPath = Path.Combine(Application.persistentDataPath, FileBrowserHelpers.GetFilename(FileBrowser.Result[0]));
