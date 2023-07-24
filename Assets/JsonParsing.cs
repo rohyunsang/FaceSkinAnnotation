@@ -2,21 +2,22 @@ using UnityEngine;
 using System.Collections.Generic;
 
 [System.Serializable]
-public class SquareDataWrapper
+public class DataWrapper
 {
-    public List<SquareData> squares;
+    public List<Data> list;
 }
 
 [System.Serializable]
-public class SquareData
+public class Data
 {
-    public string id;
-    public PointData point1;
-    public PointData point2;
+    public string name;
+    public PositionData position;
+    public float width;
+    public float height;
 }
 
 [System.Serializable]
-public class PointData
+public class PositionData
 {
     public float x;
     public float y;
@@ -24,28 +25,33 @@ public class PointData
 
 public class JsonParsing : MonoBehaviour
 {
-    public List<SquareData> squares = null;
-
+    public List<Data> dataItems = null;
+    public GameObject ObjInstantGameObject; // using call ObjInstantManager Class Function
     public void ParseJSONData(string jsonData)
     {
-        // Deserialize the JSON data into the SquareDataWrapper object
-        SquareDataWrapper dataWrapper = JsonUtility.FromJson<SquareDataWrapper>(jsonData);
+        // Deserialize the JSON data into the DataWrapper object
+        DataWrapper dataWrapper = JsonUtility.FromJson<DataWrapper>(jsonData);
 
-        // Clear existing squares list
-        squares.Clear();
+        // Clear existing data list
+        dataItems.Clear();
 
-        // Add the parsed squares to the list
-        squares.AddRange(dataWrapper.squares);
+        // Add the parsed data items to the list
+        dataItems.AddRange(dataWrapper.list);
 
-        // Access individual square objects and their properties
-        if (squares != null)
+        // Access individual data objects and their properties
+        if (dataItems != null)
         {
-            foreach (SquareData square in squares)
+            foreach (Data data in dataItems)
             {
-                Debug.Log("Square ID: " + square.id);
-                Debug.Log("Point 1: (" + square.point1.x + ", " + square.point1.y + ")");
-                Debug.Log("Point 2: (" + square.point2.x + ", " + square.point2.y + ")");
+                string logString = "Name: " + data.name +
+                                   ", Position: (" + data.position.x + ", " + data.position.y + ")" +
+                                   ", Width: " + data.width +
+                                   ", Height: " + data.height;
+                Debug.Log(logString);
+                
             }
         }
+        ObjInstantGameObject.GetComponent<ObjInstantManager>().ObjInstant(dataItems);
+
     }
 }
