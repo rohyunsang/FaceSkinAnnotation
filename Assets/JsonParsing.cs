@@ -14,8 +14,9 @@ public class Data
     public PositionData position;
     public float width;
     public float height;
+    public string description;  
 }
-
+    
 [System.Serializable]
 public class PositionData
 {
@@ -27,31 +28,48 @@ public class JsonParsing : MonoBehaviour
 {
     public List<Data> dataItems = null;
     public GameObject ObjInstantGameObject; // using call ObjInstantManager Class Function
+    public GameObject JsonGameObject;
     public void ParseJSONData(string jsonData)
     {
-        // Deserialize the JSON data into the DataWrapper object
-        DataWrapper dataWrapper = JsonUtility.FromJson<DataWrapper>(jsonData);
-
-        // Clear existing data list
-        dataItems.Clear();
-
-        // Add the parsed data items to the list
-        dataItems.AddRange(dataWrapper.list);
-
-        // Access individual data objects and their properties
-        if (dataItems != null)
+        try
         {
-            foreach (Data data in dataItems)
+            // Deserialize the JSON data into the DataWrapper object
+            DataWrapper dataWrapper = JsonUtility.FromJson<DataWrapper>(jsonData);
+
+            // Check if list in dataWrapper is not null
+            if (dataWrapper?.list != null)
             {
-                string logString = "Name: " + data.name +
-                                   ", Position: (" + data.position.x + ", " + data.position.y + ")" +
-                                   ", Width: " + data.width +
-                                   ", Height: " + data.height;
-                Debug.Log(logString);
-                
+                // Clear existing data list
+                dataItems.Clear();
+
+                // Add the parsed data items to the list
+                dataItems.AddRange(dataWrapper.list);
+
+                // Access individual data objects and their properties
+                foreach (Data data in dataItems)
+                {
+                    // Assign a value to the new field
+                    data.description = "Description for " + data.name;
+
+                    string logString = "Name: " + data.name +
+                                       ", Position: (" + data.position.x + ", " + data.position.y + ")" +
+                                       ", Width: " + data.width +
+                                       ", Height: " + data.height +
+                                       ", Description: " + data.description;  // Include the new field in the log
+                    Debug.Log(logString);
+
+                }
+                ObjInstantGameObject.GetComponent<ObjInstantManager>().ObjInstant(dataItems);
+                JsonGameObject.GetComponent<Json>().CopyJsonData(dataItems);
+            }
+            else
+            {
+                Debug.LogError("JSON Parsing failed. DataWrapper or its list is null.");
             }
         }
-        ObjInstantGameObject.GetComponent<ObjInstantManager>().ObjInstant(dataItems);
-
+        catch (System.Exception e)
+        {
+            Debug.LogError("JSON Parsing Error: " + e.Message);
+        }
     }
 }
