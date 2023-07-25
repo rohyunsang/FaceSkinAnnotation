@@ -92,7 +92,7 @@ GameObject:
   - component: {fileID: 1634066616897513276}
   - component: {fileID: 1473784949546893946}
   - component: {fileID: 739157459684381014}
-  - component: {fileID: 1021609275680144646}
+  - component: {fileID: 3034183730517150377}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
@@ -203,8 +203,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1021609275680144646}
-        m_TargetAssemblyTypeName: ShowStatus, Assembly-CSharp
+      - m_Target: {fileID: 3034183730517150377}
+        m_TargetAssemblyTypeName: PassingPartName, Assembly-CSharp
         m_MethodName: ButtonNamePass
         m_Mode: 1
         m_Arguments:
@@ -215,7 +215,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &1021609275680144646
+--- !u!114 &3034183730517150377
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -224,16 +224,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 6467952595873649915}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5fd31f096f2ba9f439ef1986e7376b2c, type: 3}
+  m_Script: {fileID: 11500000, guid: 2076d1db05873d14b8cad454e3720a88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StatusA: {fileID: 0}
-  StatusB: {fileID: 0}
-  StatusC: {fileID: 0}
-  StatusD: {fileID: 0}
-  StatusE: {fileID: 0}
-  StatusF: {fileID: 0}
-  StatusG: {fileID: 0}
-  StatusH: {fileID: 0}
-  StatusI: {fileID: 0}
-  StatusJ: {fileID: 0}
