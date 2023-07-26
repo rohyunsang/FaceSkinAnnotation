@@ -49,7 +49,7 @@ public class JsonParsing : MonoBehaviour
                 foreach (Data data in dataItems)
                 {
                     // Assign a value to the new field
-                    data.description = "Description for " + data.name;
+                    data.description = data.name + " : ";
 
                     string logString = "Name: " + data.name +
                                        ", Position: (" + data.position.x + ", " + data.position.y + ")" +
