@@ -3,8 +3,20 @@ using System.Collections.Generic;
 using System.Net.NetworkInformation;
 using UnityEngine;
 using UnityEngine.UI;
+using System.IO;
 
-public class Json : MonoBehaviour
+[System.Serializable]
+public class FaceData
+{
+    public string name;
+    public Vector2 position;
+    public float width;
+    public float height;
+    public string description;
+}
+
+
+public class Json : MonoBehaviour  // Json, Show Status 
 {
     public List<GameObject> faceStatuses = new List<GameObject>(); // List of GameObjects
 
@@ -62,6 +74,67 @@ public class Json : MonoBehaviour
             default:
                 break;
         }
+    }
+
+    public void FaceScore(string name)
+    {
+        string region_name = "";
+        string region_condition = "";
+
+        // Split the name string on space
+        string[] splitName = name.Split(' ');
+
+        // Assuming the first part is the region name
+        region_name = splitName[0];
+
+        // Assuming the second part is the region condition
+        if (splitName.Length > 1)  // Make sure there is a second part
+            region_condition = splitName[1];
+
+        switch (region_name)
+        {
+            case "forehead":
+                dataItems[0].description = region_condition;
+                break;
+            case "glabellus":
+                
+                break;
+            case "l_peroucular":
+                
+                break;
+            case "r_peroucular":
+                
+                break;
+            case "l_cheek":
+                
+                break;
+            case "r_cheek":
+                
+                break;
+            case "lip":
+                
+                break;
+            case "chin":
+                
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void JsonOut()  // save in desktop 
+    {
+        DataWrapper wrapper = new DataWrapper();
+        wrapper.list = dataItems;
+
+        // Serialize it to a JSON string
+        string json = JsonUtility.ToJson(wrapper, true);
+
+        // Write the JSON string to a file in desktop
+        string desktopPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Desktop);
+        File.WriteAllText(desktopPath + "/faceField.json", json);
+
+        Debug.Log("Complete");
     }
 
     private void Start()
