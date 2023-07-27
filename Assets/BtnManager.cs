@@ -19,16 +19,18 @@ public class BtnManager : MonoBehaviour  // button 클릭 넘버랑 번호
         }
     }
 
-    void ButtonClick(int buttonIndex)
-    {
-        buttonValue = buttonIndex;
-        Debug.Log(this.statusName + " : " + buttonIndex.ToString());
-
-    }
     public void SetStatusName(string statusName)
     {
         this.statusName = statusName;
-        Debug.Log(statusName);
+        Debug.Log("SetStatusName called with: " + statusName);
     }
-    
+
+    void ButtonClick(int buttonIndex)
+    {
+        Debug.Log("In ButtonClick, statusName is: " + this.statusName);
+        buttonValue = buttonIndex;
+        Debug.Log(this.statusName + " : " + buttonIndex.ToString());
+        JsonManager.GetComponent<Json>().FaceScore(this.statusName + " : " + buttonIndex.ToString());
+    }
+
 }

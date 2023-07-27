@@ -4,6 +4,7 @@ using System.Net.NetworkInformation;
 using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
+using System.Runtime.CompilerServices;
 
 [System.Serializable]
 public class FaceData
@@ -78,8 +79,10 @@ public class Json : MonoBehaviour  // Json, Show Status
 
     public void FaceScore(string name)
     {
+        Debug.Log("FaceScore" + name);
         string region_name = "";
         string region_condition = "";
+        
 
         // Split the name string on space
         string[] splitName = name.Split(' ');
@@ -88,34 +91,48 @@ public class Json : MonoBehaviour  // Json, Show Status
         region_name = splitName[0];
 
         // Assuming the second part is the region condition
-        if (splitName.Length > 1)  // Make sure there is a second part
-            region_condition = splitName[1];
+        
+        foreach(string s in splitName)
+        {
+            if(!s.Equals(region_name))
+                region_condition += s;
+        }
+
+        Debug.Log(region_name);
+        Debug.Log(region_condition);
 
         switch (region_name)
         {
             case "forehead":
-                dataItems[0].description = region_condition;
+                int index = region_condition.IndexOf(':');
+                string condition = region_condition.Substring(0, index);
+                if (condition.Equals("wrinkle"))
+                    dataItems[0].status.statusA = region_condition; // wrinkle - 주름
+                else
+                    dataItems[0].status.statusB = region_condition; // pigmentation - 색소 침착
                 break;
             case "glabellus":
-                
+                dataItems[1].status.statusA = region_condition; // wrinkle  
                 break;
             case "l_peroucular":
-                
+                dataItems[2].status.statusA = region_condition; // wrinkle  
                 break;
             case "r_peroucular":
-                
+                dataItems[3].status.statusA = region_condition; // wrinkle  
                 break;
             case "l_cheek":
-                
+                dataItems[4].status.statusA = region_condition; // pigmentation
+                dataItems[4].status.statusB = region_condition; // pores - 모공
                 break;
             case "r_cheek":
-                
+                dataItems[5].status.statusA = region_condition; // pigmentation
+                dataItems[5].status.statusB = region_condition; // pores - 모공
                 break;
             case "lip":
-                
+                dataItems[6].status.statusA = region_condition; // dryness - 입술 건조도 
                 break;
             case "chin":
-                
+                dataItems[7].status.statusA = region_condition; // chin ptosis - 턱선 처짐
                 break;
             default:
                 break;

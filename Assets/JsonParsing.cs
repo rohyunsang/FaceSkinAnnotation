@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 
 [System.Serializable]
 public class DataWrapper
@@ -14,7 +15,13 @@ public class Data
     public PositionData position;
     public float width;
     public float height;
-    public string description;  
+    public Status status;  
+}
+[System.Serializable]
+public class Status
+{
+    public string statusA;
+    public string statusB;
 }
     
 [System.Serializable]
@@ -49,13 +56,14 @@ public class JsonParsing : MonoBehaviour
                 foreach (Data data in dataItems)
                 {
                     // Assign a value to the new field
-                    data.description = data.name + " : ";
+                    data.status.statusA = "";
+                    data.status.statusB = "";
 
                     string logString = "Name: " + data.name +
                                        ", Position: (" + data.position.x + ", " + data.position.y + ")" +
                                        ", Width: " + data.width +
                                        ", Height: " + data.height +
-                                       ", Description: " + data.description;  // Include the new field in the log
+                                       ", Description: " + data.status.statusA + data.status.statusB;  // Include the new field in the log
                     Debug.Log(logString);
 
                 }
