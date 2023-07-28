@@ -92,6 +92,7 @@ GameObject:
   - component: {fileID: 1634066616897513276}
   - component: {fileID: 1473784949546893946}
   - component: {fileID: 739157459684381014}
+  - component: {fileID: 9026783268409471090}
   - component: {fileID: 3034183730517150377}
   m_Layer: 0
   m_Name: GameObject
@@ -215,6 +216,31 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 3034183730517150377}
+        m_TargetAssemblyTypeName: PassingPartName, Assembly-CSharp
+        m_MethodName: OffBtns
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &9026783268409471090
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6467952595873649915}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 927948cffe07ee14b94daf6cbfe791ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Btns: []
 --- !u!114 &3034183730517150377
 MonoBehaviour:
   m_ObjectHideFlags: 0
