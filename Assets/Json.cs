@@ -104,9 +104,9 @@ public class Json : MonoBehaviour  // Json, Show Status
         switch (region_name)
         {
             case "forehead":
-                int index = region_condition.IndexOf(':');
-                string condition = region_condition.Substring(0, index);
-                if (condition.Equals("wrinkle"))
+                int index1 = region_condition.IndexOf(':');
+                string condition1 = region_condition.Substring(0, index1);
+                if (condition1.Equals("wrinkle"))
                     dataItems[0].status.statusA = region_condition; // wrinkle - 주름
                 else
                     dataItems[0].status.statusB = region_condition; // pigmentation - 색소 침착
@@ -121,12 +121,20 @@ public class Json : MonoBehaviour  // Json, Show Status
                 dataItems[3].status.statusA = region_condition; // wrinkle  
                 break;
             case "l_cheek":
-                dataItems[4].status.statusA = region_condition; // pigmentation
-                dataItems[4].status.statusB = region_condition; // pores - 모공
+                int index2 = region_condition.IndexOf(':');
+                string condition2 = region_condition.Substring(0, index2);
+                if (condition2.Equals("pigmentation"))
+                    dataItems[4].status.statusA = region_condition; // pigmentation
+                else
+                    dataItems[4].status.statusB = region_condition; // pores - 모공
                 break;
             case "r_cheek":
-                dataItems[5].status.statusA = region_condition; // pigmentation
-                dataItems[5].status.statusB = region_condition; // pores - 모공
+                int index3 = region_condition.IndexOf(':');
+                string condition3 = region_condition.Substring(0, index3);
+                if (condition3.Equals("pigmentation"))
+                    dataItems[5].status.statusA = region_condition; // pigmentation
+                else
+                    dataItems[5].status.statusB = region_condition; // pores - 모공
                 break;
             case "lip":
                 dataItems[6].status.statusA = region_condition; // dryness - 입술 건조도 
