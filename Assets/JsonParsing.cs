@@ -62,9 +62,6 @@ public class JsonParsing : MonoBehaviour
 
     public GameObject failWindow;
     public Text SquareText;
-
-    private bool isCoroutineRunning = false;
-
     public void MakeJsonArray(string jsonData)
     {
         ParseJSONData(jsonData);
@@ -78,7 +75,7 @@ public class JsonParsing : MonoBehaviour
     }
     public void CheckingFileCount()
     {
-        if (jsonSquares.Count == imageDatas.Count && jsonSquares.Count != 0)
+        if (jsonSquares.Count != 0)
         {
             InitPortrait();
         }
@@ -99,7 +96,37 @@ public class JsonParsing : MonoBehaviour
         {
             Destroy(child.gameObject);
         }
-        isCoroutineRunning = false;
+    }
+
+    public void SetChildRectScale()
+    {
+        foreach (GameObjectList gameObjectList in jsonSquares)
+        {
+            foreach (GameObject obj in gameObjectList.gameObjects)
+            {
+                // Get the RectTransform component of the parent GameObject
+                RectTransform parentRect = obj.GetComponent<RectTransform>();
+
+                // Make sure the parent has a RectTransform component
+                if (parentRect != null)
+                {
+                    // Try to find a child GameObject named "ChildRect"
+                    Transform childTransform = obj.transform.Find("ChildRect");
+
+                    if (childTransform != null)
+                    {
+                        // Get the RectTransform component of the child GameObject
+                        RectTransform childRect = childTransform.GetComponent<RectTransform>();
+
+                        if (childRect != null)
+                        {
+                            // Set the child's width and height to match the parent's
+                            childRect.sizeDelta = parentRect.sizeDelta + new Vector2(10f, 10f);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private void FailWindowSetActiveFalse()
@@ -140,46 +167,14 @@ public class JsonParsing : MonoBehaviour
     }
     public void QueueManager(int idx) // using btn;
     {
+        SetChildRectScale();
         jsonSquares[this.idx].gameObjects.ForEach(square => square.SetActive(false));
         // 1. 사진을 클릭하면 idx를 기준으로 jsonSquare과 이미지를 뛰운다. 
         this.idx = idx;
         jsonSquares[this.idx].gameObjects.ForEach(square => square.SetActive(true));
         faceImage.texture = imageDatas[this.idx];
-        if (!isCoroutineRunning)
-        {
-            StartCoroutine(SetRaycastTargetTrueEveryTwoSecond());
-        }
+       
     }
-
-    private IEnumerator SetRaycastTargetTrueEveryTwoSecond()
-    {
-        isCoroutineRunning = true;
-        while (true)
-        {
-            foreach (GameObjectList list in jsonSquares)
-            {
-                foreach (GameObject obj in list.gameObjects)
-                {
-                    // Image 컴포넌트에 대한 처리
-                    Image img = obj.GetComponent<Image>();
-                    if (img != null)
-                    {
-                        img.raycastTarget = true;
-                    }
-
-                    // RawImage 컴포넌트에 대한 처리
-                    RawImage rawImg = obj.GetComponent<RawImage>();
-                    if (rawImg != null)
-                    {
-                        rawImg.raycastTarget = true;
-                    }
-                }
-            }
-
-            yield return new WaitForSeconds(2f);
-        }
-    }
-
     public void ParseJSONData(string jsonData)
     {
         var rootObject = JsonConvert.DeserializeObject<RootObject>(jsonData);
