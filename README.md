@@ -1,2 +1,1 @@
-# FaceSkinAnnotation
-Windows, Unity
+# FaceAnnotationTool

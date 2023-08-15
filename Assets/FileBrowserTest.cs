@@ -4,111 +4,93 @@ using System.IO;
 using TMPro;
 using SimpleFileBrowser;
 using UnityEngine.UI;
+using System.Collections.Generic;
+using System.Linq;
 
 public class FileBrowserTest : MonoBehaviour
 {
-    // Warning: paths returned by FileBrowser dialogs do not contain a trailing '\' character
-    // Warning: FileBrowser can only show 1 dialog at a time
+    public Dictionary<string, string> jsonStrings = new Dictionary<string, string>(); // fileName, fileBytes
 
-    public string jsonString = "";
-    public RawImage faceImage;
     public GameObject jsonManager;
 
-    void Start()
-    {
-        //jsonManager 
-    }
+    public string filePath = "";
+
     public void ShowFileBrowser()
     {
-        // Set filters (optional)
-        // It is sufficient to set the filters just once (instead of each time before showing the file browser dialog), 
-        // if all the dialogs will be using the same filters
-        FileBrowser
-            .SetFilters(true, new FileBrowser
-            .Filter("Files", ".jpg", ".png", ".json")
-            , new FileBrowser.Filter("Text Files", ".txt", ".pdf"));
-
-        // Set default filter that is selected when the dialog is shown (optional)
-        // Returns true if the default filter is set successfully
-        // In this case, set Images filter as the default filter
+        FileBrowser.SetFilters(true, new FileBrowser.Filter("Files", ".jpg", ".png", ".json"), new FileBrowser.Filter("Text Files", ".txt", ".pdf"));
         FileBrowser.SetDefaultFilter(".json");
-
-        // Set excluded file extensions (optional) (by default, .lnk and .tmp extensions are excluded)
-        // Note that when you use this function, .lnk and .tmp extensions will no longer be
-        // excluded unless you explicitly add them as parameters to the function
         FileBrowser.SetExcludedExtensions(".lnk", ".tmp", ".zip", ".rar", ".exe");
-
-        // Add a new quick link to the browser (optional) (returns true if quick link is added successfully)
-        // It is sufficient to add a quick link just once
-        // Name: Users
-        // Path: C:\Users
-        // Icon: default (folder icon)
         FileBrowser.AddQuickLink("Users", "C:\\Users", null);
 
-        // Show a save file dialog 
-        // onSuccess event: not registered (which means this dialog is pretty useless)
-        // onCancel event: not registered
-        // Save file/folder: file, Allow multiple selection: false
-        // Initial path: "C:\", Initial filename: "Screenshot.png"
-        // Title: "Save As", Submit button text: "Save"
-        // FileBrowser.ShowSaveDialog( null, null, FileBrowser.PickMode.Files, false, "C:\\", "Screenshot.png", "Save As", "Save" );
-
-        // Show a select folder dialog 
-        // onSuccess event: print the selected folder's path
-        // onCancel event: print "Canceled"
-        // Load file/folder: folder, Allow multiple selection: false
-        // Initial path: default (Documents), Initial filename: empty
-        // Title: "Select Folder", Submit button text: "Select"
-        // FileBrowser.ShowLoadDialog( ( paths ) => { Debug.Log( "Selected: " + paths[0] ); },
-        //						   () => { Debug.Log( "Canceled" ); },
-        //						   FileBrowser.PickMode.Folders, false, null, null, "Select Folder", "Select" );
-
-        // Coroutine example
         StartCoroutine(ShowLoadDialogCoroutine());
     }
 
     IEnumerator ShowLoadDialogCoroutine()
     {
-        // Show a load file dialog and wait for a response from user
-        // Load file/folder: both, Allow multiple selection: true
-        // Initial path: default (Documents), Initial filename: empty
-        // Title: "Load File", Submit button text: "Load"
         yield return FileBrowser.WaitForLoadDialog(FileBrowser.PickMode.FilesAndFolders, true, null, null, "Load Files and Folders", "Load");
-
-        // Dialog is closed
-        // Print whether the user has selected some files/folders or cancelled the operation (FileBrowser.Success)
-        Debug.Log(FileBrowser.Success);
 
         if (FileBrowser.Success)
         {
-            // Print paths of the selected files (FileBrowser.Result) (null, if FileBrowser.Success is false)
             for (int i = 0; i < FileBrowser.Result.Length; i++)
-                Debug.Log(FileBrowser.Result[i]);
-
-            string extension = Path.GetExtension(FileBrowser.Result[0]);
-            if (extension.ToLower() == ".jpg")  //jpg file
             {
-                byte[] bytes = FileBrowserHelpers.ReadBytesFromFile(FileBrowser.Result[0]);
+                string extension = Path.GetExtension(FileBrowser.Result[i]);
 
-                // Create a Texture2D from the image bytes
-                Texture2D texture = new Texture2D(2, 2);
-                texture.LoadImage(bytes);
+                if (extension == "")
+                {
+                    // 모든 .json 파일 처리
+                    List<string> jsonFiles = GetAllFilesInDirectory(FileBrowser.Result[i], "*.json");
+                    foreach (string jsonFile in jsonFiles)
+                    {
+                        Debug.Log("Processing JSON file: " + Path.GetFileName(jsonFile));  // JSON 파일 이름 디버그
+                        byte[] bytes = FileBrowserHelpers.ReadBytesFromFile(jsonFile);
+                        jsonStrings[Path.GetFileName(jsonFile)] = System.Text.Encoding.UTF8.GetString(bytes);
 
-                faceImage.texture = texture;
+                    }
+
+                    // 모든 .jpg 파일 처리
+                    List<string> jpgFiles = GetAllFilesInDirectory(FileBrowser.Result[i], "*.jpg");
+                    foreach (string jpgFile in jpgFiles)
+                    {
+                        byte[] bytes = FileBrowserHelpers.ReadBytesFromFile(jpgFile);
+                        jsonManager.GetComponent<JsonParsing>().MakeImageStringArray(bytes);
+
+                        // .jpg 파일의 현재 디렉토리를 가져옵니다.
+                        string currentDirectory = Path.GetDirectoryName(jpgFile);
+                        filePath = Path.GetDirectoryName(jpgFile);
+                        Debug.Log("Current Directory of " + Path.GetFileName(jpgFile) + ": " + currentDirectory);
+                    }
+                }
+                var ordered = jsonStrings.OrderBy(pair => pair.Key).ToDictionary(pair => pair.Key, pair => pair.Value);
+                jsonStrings = ordered;
+                foreach (KeyValuePair<string, string> entry in jsonStrings)
+                {
+                    Debug.Log("Key: " + entry.Key);
+                }
+                // 정렬된 딕셔너리에서 마지막 원소의 값을 가져옵니다.
+                string lastJsonValue = jsonStrings.LastOrDefault().Value;
+
+                // 마지막 원소의 값을 MakeJsonArray 메서드에 전달합니다.
+                jsonManager.GetComponent<JsonParsing>().MakeJsonArray(lastJsonValue);
+                jsonManager.GetComponent<JsonParsing>().CheckingFileCount();
+                string destinationPath = Path.Combine(Application.persistentDataPath, FileBrowserHelpers.GetFilename(FileBrowser.Result[i]));
+                FileBrowserHelpers.CopyFile(FileBrowser.Result[i], destinationPath);
             }
-            else  // json file
-            {
-                // Read the bytes of the first file via FileBrowserHelpers
-                // Contrary to File.ReadAllBytes, this function works on Android 10+, as well
-                byte[] bytes = FileBrowserHelpers.ReadBytesFromFile(FileBrowser.Result[0]);
-
-                jsonString = System.Text.Encoding.UTF8.GetString(bytes);
-                jsonManager.GetComponent<JsonParsing>().ParseJSONData(jsonString);
-            }
-
-            // Or, copy the first file to persistentDataPath
-            string destinationPath = Path.Combine(Application.persistentDataPath, FileBrowserHelpers.GetFilename(FileBrowser.Result[0]));
-            FileBrowserHelpers.CopyFile(FileBrowser.Result[0], destinationPath);
         }
+    }
+
+    public List<string> GetAllFilesInDirectory(string directoryPath, string searchPattern)
+    {
+        List<string> files = new List<string>();
+
+        // 현재 디렉토리에서 파일들을 가져옵니다.
+        files.AddRange(Directory.GetFiles(directoryPath, searchPattern));
+
+        // 모든 하위 디렉토리를 가져와 각 하위 디렉토리에 대해 재귀적으로 이 함수를 호출합니다.
+        foreach (string subDirectory in Directory.GetDirectories(directoryPath))
+        {
+            files.AddRange(GetAllFilesInDirectory(subDirectory, searchPattern));
+        }
+
+        return files;
     }
 }
