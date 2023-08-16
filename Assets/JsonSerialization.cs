@@ -28,8 +28,6 @@ public class RectangleData
 public class SerializableDict
 {
     public List<ImageData> imageDataList = new List<ImageData>();
-    public string userName;
-    public string userEmail;
     public string currentTime;
 }
 
@@ -125,8 +123,6 @@ public class JsonSerialization : MonoBehaviour
     {
         SerializableDict serializableDict = new SerializableDict
         {
-            userName = UserDataObj.GetComponent<SaveUserData>().idCheckText.text,
-            userEmail = UserDataObj.GetComponent<SaveUserData>().emailCheckText.text,
             currentTime = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
         };
 
@@ -144,11 +140,11 @@ public class JsonSerialization : MonoBehaviour
         string currentPath = FileBrowserObj.GetComponent<FileBrowserTest>().filePath;
 
         // 'jsons' 디렉토리 경로를 생성합니다.
-        string jsonsDirectoryPath = Path.Combine(currentPath, "jsons");
+        string jsonsDirectoryPath = Path.Combine(currentPath, "전문가 진단 결과");
         Directory.CreateDirectory(jsonsDirectoryPath);  // 디렉토리가 없으면 생성하고, 있으면 아무것도 하지 않습니다.
 
         // 'jsons' 디렉토리 안에 .json 파일을 저장합니다.
-        string jsonFilePath = Path.Combine(jsonsDirectoryPath, "faceField" + System.DateTime.Now.ToString("MM_dd_HH_mm_ss") + ".json");
+        string jsonFilePath = Path.Combine(jsonsDirectoryPath, "diagnosis" + System.DateTime.Now.ToString("MM_dd_HH_mm_ss") + ".json");
         File.WriteAllText(jsonFilePath, json);
 
         Debug.Log("Complete");

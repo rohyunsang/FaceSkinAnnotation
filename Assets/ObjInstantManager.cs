@@ -1,6 +1,8 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
 
 public class ObjInstantManager : MonoBehaviour
 {
@@ -16,8 +18,13 @@ public class ObjInstantManager : MonoBehaviour
 
     public void ObjInstant(List<Info> parsedInfo)
     {
+        parsedInfo = parsedInfo.OrderBy(info => info.id).ToList();
         foreach (Info info in parsedInfo)
         {
+            if (info.id.Contains("phone") || info.id.Contains("pad"))
+            {
+                continue; // Skip this iteration if the id doesn't contain 'phone' or 'pad'
+            }
             GameObjectList gameObjectList = new GameObjectList();
             List<GameObject> newRectangles = new List<GameObject>();
             for (int i = 0; i < info.region_name.Length; i++) 
