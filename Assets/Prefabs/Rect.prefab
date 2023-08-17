@@ -92,9 +92,10 @@ GameObject:
   - component: {fileID: 1634066616897513276}
   - component: {fileID: 1473784949546893946}
   - component: {fileID: 6507356296016962602}
-  - component: {fileID: 6072445393559571301}
   - component: {fileID: 8006920587486703796}
   - component: {fileID: 2399929532975739199}
+  - component: {fileID: 5407028918435317691}
+  - component: {fileID: 4949049001648624144}
   m_Layer: 5
   m_Name: Rect
   m_TagString: Untagged
@@ -183,23 +184,6 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
---- !u!114 &6072445393559571301
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6467952595873649915}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_IgnoreReversedGraphics: 1
-  m_BlockingObjects: 0
-  m_BlockingMask:
-    serializedVersion: 2
-    m_Bits: 4294967295
 --- !u!114 &8006920587486703796
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -256,7 +240,48 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1473784949546893946}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 5407028918435317691}
+        m_TargetAssemblyTypeName: SearchStatusObj, Assembly-CSharp
+        m_MethodName: HandleButtonClick
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 2399929532975739199}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.UI.Button, UnityEngine.UI
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &5407028918435317691
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6467952595873649915}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 255f60bb5ca7e3d428d4bd51885ebd98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &4949049001648624144
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6467952595873649915}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
 --- !u!1 &7237230020570100793
 GameObject:
   m_ObjectHideFlags: 0

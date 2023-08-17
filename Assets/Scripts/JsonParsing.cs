@@ -61,7 +61,16 @@ public class JsonParsing : MonoBehaviour
     public Transform scrollViewInitPanel;
 
     public GameObject failWindow;
-    public Text SquareText;
+
+    public GameObject CropManagerObj;
+
+    public void DataPassToCrop()
+    {
+        CropFaceImage cropScript = CropManagerObj.GetComponent<CropFaceImage>();
+        cropScript.imageDatas = this.imageDatas;
+        cropScript.parsedInfo = this.parsedInfo;
+    }
+
     public void MakeJsonArray(string jsonData)
     {
         ParseJSONData(jsonData);

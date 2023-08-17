@@ -9,13 +9,21 @@ public class PanelManager : MonoBehaviour
     public GameObject OptionPanel;
     public GameObject SavePanel;
     public GameObject LoginPanel;
+    public GameObject StatusPanel;
 
 
     public GameObject faceField;
 
     public GameObject ImageClickInfo;
 
-    
+    public void OnStatusPanel()
+    {
+        StatusPanel.SetActive(true);
+    }
+    public void OffStatusPanel()
+    {
+        StatusPanel.SetActive(false);
+    }
 
     public void OffImageClickInfo()
     {
