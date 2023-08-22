@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Unity.Android.Types;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,6 +20,9 @@ public class ObjInstantManager : MonoBehaviour
 
     private const float PIXEL_FACEIMAGE_WIDTH = 715f;
     private const float PIXEL_FACEIMAGE_HEIGHT = 1080f;
+
+    
+
 
     public void PimpleInstant(PimpleData pimpleData)
     {

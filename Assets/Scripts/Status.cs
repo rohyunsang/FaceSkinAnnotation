@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
@@ -68,13 +69,62 @@ public class Status : MonoBehaviour
 
     void Start()
     {
-        // 예제: ForeheadWrinkle의 이름과 최대 점수 출력
-        Debug.Log($"Condition: {ForeheadWrinkle.ConditionName}, Max Score: {ForeheadWrinkle.MaxScore}");
-
         for (int i = 0; i < Btns.transform.childCount; i++)
         {
             Button btn = Btns.transform.GetChild(i).GetComponent<Button>();
             btn.onClick.AddListener(() => OnScoreButtonClicked(btn));
+        }
+    }
+
+    public void LoadStatusText(List<ScoreData> scoreDatas)
+    {
+        foreach (ScoreData scoreData in scoreDatas)
+        {
+            foreach (var score in scoreData.scores)
+            {
+                string name = score.name.ToLower(); // Convert to lowercase for easier matching
+                string value = score.score.ToString();
+
+                switch (name)
+                {
+                    case "foreheadwrinkle":
+                        foreheadWrinkleText.text = value;
+                        break;
+                    case "foreheadpigmentation":
+                        foreheadPigmentationText.text = value;
+                        break;
+                    case "glabelluswrinkle":
+                        glabellusWrinkleText.text = value;
+                        break;
+                    case "lperiocularwrinkle":
+                        lPeriocularWrinkleText.text = value;
+                        break;
+                    case "rperiocularwrinkle":
+                        rPeriocularWrinkleText.text = value;
+                        break;
+                    case "lcheekpigmentation":
+                        lCheekPigmentationText.text = value;
+                        break;
+                    case "lcheekpores":
+                        lCheekPoresText.text = value;
+                        break;
+                    case "rcheekpigmentation":
+                        rCheekPigmentationText.text = value;
+                        break;
+                    case "rcheekpores":
+                        rCheekPoresText.text = value;
+                        break;
+                    case "lipdryness":
+                        lipDrynessText.text = value;
+                        break;
+                    case "chinptosis":
+                        chinPtosisText.text = value;
+                        break;
+                    default:
+                        Debug.LogError("Unknown score name in LoadStatusText: " + name);
+                        break;
+                }
+            }
         }
     }
 

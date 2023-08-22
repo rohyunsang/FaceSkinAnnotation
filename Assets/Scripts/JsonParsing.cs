@@ -74,6 +74,21 @@ public class JsonParsing : MonoBehaviour
 
     [SerializeField]
     List<ScoreData> scoreDatas;
+
+    public void InitData()
+    {
+        InitPimple();
+        InitStatusScore();
+    }
+    public void InitStatusScore()
+    {
+        scoreDatas.Clear();
+    }
+    public void InitPimple()
+    {
+        if (pimpleData != null)
+            pimpleData.Clear();
+    }
     public void DataPassToCrop()
     {
         CropFaceImage cropScript = CropManagerObj.GetComponent<CropFaceImage>();
@@ -286,6 +301,9 @@ public class JsonParsing : MonoBehaviour
         // You can process the scoreDatas as needed here
 
         ObjInstantGameObject.GetComponent<ObjInstantManager>().RectangleInstant(parsedInfo); // parsing한 data를 전달 
-        ObjInstantGameObject.GetComponent<ObjInstantManager>().PimpleInstant(pimpleData);
+        if(pimpleData != null)
+            ObjInstantGameObject.GetComponent<ObjInstantManager>().PimpleInstant(pimpleData);
+        if(scoreDatas != null)
+            StatusObj.GetComponent<Status>().LoadStatusText(scoreDatas);
     }
 }

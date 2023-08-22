@@ -18,6 +18,12 @@ public class PimpleData
     public List<PimpleEntry> _f = new List<PimpleEntry>();
     public List<PimpleEntry> _r30 = new List<PimpleEntry>();
     public List<PimpleEntry> _l30 = new List<PimpleEntry>();
+    public void Clear()
+    {
+        _f.Clear();
+        _r30.Clear();
+        _l30.Clear();
+    }
 }
 [System.Serializable]
 public class ScoreEntry
