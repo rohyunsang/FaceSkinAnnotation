@@ -18,6 +18,7 @@ public class ZoomOnImage : MonoBehaviour, IDragHandler, IScrollHandler, IPointer
     public Button originPositionBtn;
 
     public Transform faceImage; // faceImage 부모 오브젝트 참조 self reference
+    public Transform backGround;
     public GameObject circlePrefab; 
 
     public GameObject namingButtonPrefabs; // Reference to the button prefab
@@ -81,9 +82,10 @@ public class ZoomOnImage : MonoBehaviour, IDragHandler, IScrollHandler, IPointer
                 if (IsCircleAtPosition(localPointerPosition))
                 {
                     // If there's a circle, create the statusButtons
-                    GameObject statusButtonsInstance = Instantiate(statusButtonPrefabs, faceImage);
-                    statusButtonsInstance.GetComponent<RectTransform>().anchoredPosition = localPointerPosition + new Vector2(130f, -5f);
-
+                    GameObject statusButtonsInstance = Instantiate(statusButtonPrefabs, backGround);
+                    statusButtonsInstance.GetComponent<RectTransform>().SetAsLastSibling();
+                    
+                    statusButtonsInstance.GetComponent<RectTransform>().anchoredPosition = localPointerPosition + new Vector2(-360f,5f);
                     // Find the circle object at the specified position
                     GameObject circle = GetCircleAtPosition(localPointerPosition);
 
@@ -119,8 +121,9 @@ public class ZoomOnImage : MonoBehaviour, IDragHandler, IScrollHandler, IPointer
                     GameObject circle = Instantiate(circlePrefab, faceImage);
                     circle.GetComponent<RectTransform>().anchoredPosition = localPointerPosition;
 
-                    GameObject buttonsInstance = Instantiate(namingButtonPrefabs, faceImage);
-                    buttonsInstance.GetComponent<RectTransform>().anchoredPosition = localPointerPosition + new Vector2(130f, -5f);
+                    GameObject buttonsInstance = Instantiate(namingButtonPrefabs, backGround);
+                    buttonsInstance.GetComponent<RectTransform>().SetAsLastSibling();
+                    buttonsInstance.GetComponent<RectTransform>().anchoredPosition = localPointerPosition + new Vector2(-360f, 5f);  // 여기서 130f, -5f는 원하는 오프셋입니다.
 
                     foreach (Transform child in buttonsInstance.transform)
                     {
@@ -181,4 +184,7 @@ public class ZoomOnImage : MonoBehaviour, IDragHandler, IScrollHandler, IPointer
         }
         return null;
     }
+
+
+
 }
