@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
-using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,6 +22,8 @@ public class ImageDataFile
 public class RootObject
 {
     public List<ImageData> imageDataList;
+    public PimpleData pimpleData;
+    public List<ScoreData> scoreDatas;
 }
 
 [System.Serializable]
@@ -42,17 +44,17 @@ public class JsonParsing : MonoBehaviour
 {
     public GameObject PanelManagerObj;
     public GameObject ObjInstantGameObject; // using call ObjInstantManager Class Function
-    public RawImage faceImage;
+    public RawImage faceImage_f;
+    public RawImage faceImage_l30;
+    public RawImage faceImage_r30;
+    public RawImage faceImage_empty;
 
     public GameObject WorkEndImage;
 
     [SerializeField]
     public List<GameObjectList> jsonSquares = new List<GameObjectList>();
     public List<Texture2D> imageDatas = new List<Texture2D>();
-    public List<string> squareCoordinate = new List<string>();
     public List<Info> parsedInfo = new List<Info>();
-
-
 
     public int idx = 0;
 
@@ -61,9 +63,17 @@ public class JsonParsing : MonoBehaviour
     public Transform scrollViewInitPanel;
 
     public GameObject failWindow;
-
     public GameObject CropManagerObj;
+    public GameObject StatusObj;
 
+    // Private variable to remember if the squares are active
+    private bool areSquaresActive = true;
+
+    [SerializeField]
+    PimpleData pimpleData;
+
+    [SerializeField]
+    List<ScoreData> scoreDatas;
     public void DataPassToCrop()
     {
         CropFaceImage cropScript = CropManagerObj.GetComponent<CropFaceImage>();
@@ -101,10 +111,55 @@ public class JsonParsing : MonoBehaviour
         jsonSquares.Clear();
         imageDatas.Clear();
         parsedInfo.Clear();
-        foreach (Transform child in faceImage.transform)
+        foreach (Transform child in faceImage_f.transform)
         {
             Destroy(child.gameObject);
         }
+        foreach (Transform child in faceImage_l30.transform)
+        {
+            Destroy(child.gameObject);
+        }
+        foreach (Transform child in faceImage_r30.transform)
+        {
+            Destroy(child.gameObject);
+        }
+        foreach (Transform child in faceImage_empty.transform)
+        {
+            Destroy(child.gameObject);
+        }
+    }
+
+
+
+    
+
+    public void OnOffBox()
+    {
+        if (areSquaresActive)
+        {
+            // Deactivate all game objects in jsonSquares
+            foreach (GameObjectList gameObjectList in jsonSquares)
+            {
+                foreach (GameObject obj in gameObjectList.gameObjects)
+                {
+                    obj.SetActive(false);
+                }
+            }
+        }
+        else
+        {
+            // Activate all game objects in jsonSquares
+            foreach (GameObjectList gameObjectList in jsonSquares)
+            {
+                foreach (GameObject obj in gameObjectList.gameObjects)
+                {
+                    obj.SetActive(true);
+                }
+            }
+        }
+
+        // Toggle the state
+        areSquaresActive = !areSquaresActive;
     }
 
     public void SetChildRectScale()
@@ -144,12 +199,29 @@ public class JsonParsing : MonoBehaviour
     }
     public void Portrait()
     {
-        for (int i = 0; i < imageDatas.Count; i++)
-        {
-            GameObject portraitInstanceA = Instantiate(portraitPrefab, scrollView.transform);
-            portraitInstanceA.name = parsedInfo[i].id;
-            portraitInstanceA.GetComponent<Image>().sprite = Sprite.Create(imageDatas[i], new Rect(0, 0, imageDatas[i].width, imageDatas[i].height), Vector2.one * 0.5f);
-        }
+        faceImage_f.texture = imageDatas[0];
+        faceImage_l30.texture = imageDatas[4];
+        faceImage_r30.texture = imageDatas[6];
+
+        faceImage_r30.gameObject.SetActive(false);
+        faceImage_l30.gameObject.SetActive(false);
+        faceImage_f.gameObject.SetActive(false);
+
+        GameObject portraitInstanceA = Instantiate(portraitPrefab, scrollView.transform);
+
+        portraitInstanceA.name = parsedInfo[0].id;
+        portraitInstanceA.GetComponent<Image>().sprite = Sprite.Create(imageDatas[0], new Rect(0, 0, imageDatas[0].width, imageDatas[0].height), Vector2.one * 0.5f);
+
+        GameObject portraitInstanceB = Instantiate(portraitPrefab, scrollView.transform);
+
+        portraitInstanceB.name = parsedInfo[4].id;
+        portraitInstanceB.GetComponent<Image>().sprite = Sprite.Create(imageDatas[4], new Rect(0, 0, imageDatas[4].width, imageDatas[4].height), Vector2.one * 0.5f);
+
+        GameObject portraitInstanceC = Instantiate(portraitPrefab, scrollView.transform);
+
+        portraitInstanceC.name = parsedInfo[12].id;
+        portraitInstanceC.GetComponent<Image>().sprite = Sprite.Create(imageDatas[6], new Rect(0, 0, imageDatas[6].width, imageDatas[6].height), Vector2.one * 0.5f);
+
     }
     public void InitPortrait()
     {
@@ -164,31 +236,28 @@ public class JsonParsing : MonoBehaviour
     }
 
 
-    public void RectanglesSetActiveFalse()
+
+    public void QueueManager(string portraitName) // using btn;
     {
-        foreach (GameObjectList gameObjectList in jsonSquares)
-        {
-            for (int i = 0; i < gameObjectList.gameObjects.Count; i++)
-            {
-                gameObjectList.gameObjects.ForEach(square => square.SetActive(false));
-            }
-        }
-    }
-    public void QueueManager(int idx) // using btn;
-    {
-        SetChildRectScale();
-        jsonSquares[this.idx].gameObjects.ForEach(square => square.SetActive(false));
-        // 1. 사진을 클릭하면 idx를 기준으로 jsonSquare과 이미지를 뛰운다. 
-        this.idx = idx;
-        jsonSquares[this.idx].gameObjects.ForEach(square => square.SetActive(true));
-        faceImage.texture = imageDatas[this.idx];
-       
+        SetChildRectScale();  // 사각형 크기 조절 
+
+        faceImage_r30.gameObject.SetActive(false);
+        faceImage_l30.gameObject.SetActive(false);
+        faceImage_f.gameObject.SetActive(false);
+
+        if(portraitName.Contains("r30")) 
+            faceImage_r30.gameObject.SetActive(true);
+        else if (portraitName.Contains("l30")) 
+            faceImage_l30.gameObject.SetActive(true);
+        else 
+            faceImage_f.gameObject.SetActive(true);
+
     }
     public void ParseJSONData(string jsonData)
     {
         var rootObject = JsonConvert.DeserializeObject<RootObject>(jsonData);
 
-        // rootObject에서 데이터에 액세스
+        // Parse image data
         foreach (var imageData in rootObject.imageDataList)
         {
             Info imageInfo = new Info();
@@ -198,7 +267,6 @@ public class JsonParsing : MonoBehaviour
 
             int i = 0;  // region_name 배열 인덱싱을 위한 변수
 
-            // 각 rectangleEntry를 처리하고 imageInfo 객체에 데이터 추가
             foreach (var rectangleEntry in imageData.rectangleEntries)
             {
                 imageInfo.region_name[i] = rectangleEntry.name;
@@ -206,27 +274,18 @@ public class JsonParsing : MonoBehaviour
                 i++;
             }
 
-            parsedInfo.Add(imageInfo); // 생성된 정보를 목록에 추가
-
+            parsedInfo.Add(imageInfo);
         }
 
-        // 선택 사항: 데이터 확인
-        //Debug
-        /*
-         foreach (var info in parsedInfo)
-        {
-            Debug.Log($"ID: {info.id}");
-            foreach (var name in info.region_name)
-            {
-                Debug.Log($"Region Name: {name}");
-            }
-            foreach (var point in info.point)
-            {
-                Debug.Log($"Point: {point}");
-            }
-        }
-         */
+        // Parse pimple data
+        pimpleData = rootObject.pimpleData;
+        // You can process the pimpleData as needed here
 
-        ObjInstantGameObject.GetComponent<ObjInstantManager>().ObjInstant(parsedInfo);
+        // Parse score data
+        scoreDatas = rootObject.scoreDatas;
+        // You can process the scoreDatas as needed here
+
+        ObjInstantGameObject.GetComponent<ObjInstantManager>().RectangleInstant(parsedInfo); // parsing한 data를 전달 
+        ObjInstantGameObject.GetComponent<ObjInstantManager>().PimpleInstant(pimpleData);
     }
 }

@@ -17,7 +17,7 @@ public class ZoomOnImage : MonoBehaviour, IDragHandler, IScrollHandler, IPointer
 
     public Button originPositionBtn;
 
-    public Transform faceImage; // faceImage 부모 오브젝트 참조
+    public Transform faceImage; // faceImage 부모 오브젝트 참조 self reference
     public GameObject circlePrefab; 
 
     public GameObject namingButtonPrefabs; // Reference to the button prefab
