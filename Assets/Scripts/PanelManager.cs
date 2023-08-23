@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PanelManager : MonoBehaviour
 {
@@ -16,6 +17,32 @@ public class PanelManager : MonoBehaviour
 
     public GameObject ImageClickInfo;
     public GameObject ImageEditInfo;
+
+    public GameObject SaveInfo;
+    public GameObject SaveCompleteInfo;
+
+    public Text uncheckingStatusText;
+
+    public void OffSaveInfo()
+    {
+        SaveInfo.SetActive(false);
+        uncheckingStatusText.text = "\n 피부 상태를 체크해주세요. \n";
+    }
+
+    public void OnSaveInfo()
+    {
+        SaveInfo.SetActive(true);
+    }
+
+    public void OnSaveCompleteInfo()
+    {
+        SaveCompleteInfo.SetActive(true);
+    }
+    
+    public void OffSaveCompleteInfo()
+    {
+        SaveCompleteInfo.SetActive(false);
+    }
 
     public void OnImageEditInfo()
     {
