@@ -82,7 +82,8 @@ public class JsonParsing : MonoBehaviour
     }
     public void InitStatusScore()
     {
-        scoreDatas.Clear();
+        if (scoreDatas != null)
+            scoreDatas.Clear();
     }
     public void InitPimple()
     {
