@@ -79,13 +79,16 @@ public class ZoomOnImage : MonoBehaviour, IDragHandler, IScrollHandler, IPointer
             RectTransform faceImageRect = faceImage as RectTransform;
             if (RectTransformUtility.ScreenPointToLocalPointInRectangle(faceImageRect, eventData.position, eventData.pressEventCamera, out Vector2 localPointerPosition))
             {
+                Debug.Log(localPointerPosition);
                 if (IsCircleAtPosition(localPointerPosition))
                 {
                     // If there's a circle, create the statusButtons
                     GameObject statusButtonsInstance = Instantiate(statusButtonPrefabs, backGround);
                     statusButtonsInstance.GetComponent<RectTransform>().SetAsLastSibling();
-                    
-                    statusButtonsInstance.GetComponent<RectTransform>().anchoredPosition = localPointerPosition + new Vector2(-360f,5f);
+
+                    Vector2 convertedPosition = ConvertToBackgroundLocalCoordinates(localPointerPosition, faceImage, backGround);
+                    statusButtonsInstance.GetComponent<RectTransform>().anchoredPosition = convertedPosition + new Vector2(130f,5f);
+
                     // Find the circle object at the specified position
                     GameObject circle = GetCircleAtPosition(localPointerPosition);
 
@@ -123,7 +126,8 @@ public class ZoomOnImage : MonoBehaviour, IDragHandler, IScrollHandler, IPointer
 
                     GameObject buttonsInstance = Instantiate(namingButtonPrefabs, backGround);
                     buttonsInstance.GetComponent<RectTransform>().SetAsLastSibling();
-                    buttonsInstance.GetComponent<RectTransform>().anchoredPosition = localPointerPosition + new Vector2(-360f, 5f);  // 여기서 130f, -5f는 원하는 오프셋입니다.
+                    Vector2 convertedPosition = ConvertToBackgroundLocalCoordinates(localPointerPosition, faceImage, backGround);
+                    buttonsInstance.GetComponent<RectTransform>().anchoredPosition = convertedPosition + new Vector2(130f, 5f);  
 
                     foreach (Transform child in buttonsInstance.transform)
                     {
@@ -185,6 +189,14 @@ public class ZoomOnImage : MonoBehaviour, IDragHandler, IScrollHandler, IPointer
         return null;
     }
 
+    public Vector2 ConvertToBackgroundLocalCoordinates(Vector2 originalLocalPos, Transform originalParent, Transform targetParent)
+    {
+        Vector3 worldPos = originalParent.TransformPoint(originalLocalPos); // Convert to world coordinates
+        Vector2 screenPos = RectTransformUtility.WorldToScreenPoint(null, worldPos); // Convert world to screen
 
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(targetParent as RectTransform, screenPos, null, out Vector2 localPos); // Convert screen to local of target
+
+        return localPos;
+    }
 
 }
