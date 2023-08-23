@@ -17,6 +17,8 @@ public class CropFaceImage : MonoBehaviour
     public GameObject lipSpawn;
     public GameObject chinSpawn;
 
+    public GameObject mainPanel;
+
     public void CaptureChildren()
     {
         int idx = 0;
@@ -34,7 +36,7 @@ public class CropFaceImage : MonoBehaviour
     private void CaptureArea(Texture2D sourceTexture, Info info)
     {
         int numRectangles = info.region_name.Length;  // Calculate the number of rectangles
-        for (int i = 0; i < numRectangles ; i++)
+        for (int i = 0; i < numRectangles; i++)
         {
             Debug.Log(numRectangles);
 
@@ -116,8 +118,39 @@ public class CropFaceImage : MonoBehaviour
                     break;
             }
         }
-        
+
     }
+
+    public void ClearCropImage()
+    {
+        DestroyChildrenOf(foreheadSpawn);
+        DestroyChildrenOf(glabellusSpawn);
+        DestroyChildrenOf(lPeriocularSpawn);
+        DestroyChildrenOf(rPeriocularSpawn);
+        DestroyChildrenOf(lCheekSpawn);
+        DestroyChildrenOf(rCheekSpawn);
+        DestroyChildrenOf(lipSpawn);
+        DestroyChildrenOf(chinSpawn);
+    }
+
+    private void DestroyChildrenOf(GameObject parent)
+    {
+        foreach (Transform child in parent.transform)
+        {
+            Destroy(child.gameObject);
+        }
+    }
+    public void DestroyStatusButton()  // mainPanel의 자식 오브젝트중 tag가 StatusButton인 것들을 다삭제. 
+    {
+        foreach (Transform child in mainPanel.transform)
+        {
+            if (child.CompareTag("StatusButton"))
+            {
+                Destroy(child.gameObject);
+            }
+        }
+    }
+
 
     private Texture2D CropTexture2D(Texture2D sourceTexture, int x, int y, int width, int height)
     {
