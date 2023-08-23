@@ -41,6 +41,10 @@ public class Status : MonoBehaviour
 
     public string currentName = "";
 
+    public GameObject JsonSerialObj;
+    public GameObject panelManagerObj;
+
+    public Text uncheckingStatusText;
 
     // 각 상태에 대한 데이터 구조 정의
     public class ConditionStatus
@@ -76,8 +80,78 @@ public class Status : MonoBehaviour
         }
     }
 
+    public void CheckingStatusText()
+    {
+        Debug.Log("OnCheckingStatusText");
+        string uncheckingStatus = "";
+
+        if (foreheadWrinkleText.text.Equals("-1"))
+            uncheckingStatus += foreheadWrinkleText.gameObject.name + ", ";
+
+        if (foreheadPigmentationText.text.Equals("-1"))
+            uncheckingStatus += foreheadPigmentationText.gameObject.name + ", ";
+
+        if (glabellusWrinkleText.text.Equals("-1"))
+            uncheckingStatus += glabellusWrinkleText.gameObject.name + ", ";
+
+        if (lPeriocularWrinkleText.text.Equals("-1"))
+            uncheckingStatus += lPeriocularWrinkleText.gameObject.name + ", ";
+
+        if (rPeriocularWrinkleText.text.Equals("-1"))
+            uncheckingStatus += rPeriocularWrinkleText.gameObject.name + ", ";
+
+        if (lCheekPigmentationText.text.Equals("-1"))
+            uncheckingStatus += lCheekPigmentationText.gameObject.name + ", ";
+
+        if (lCheekPoresText.text.Equals("-1"))
+            uncheckingStatus += lCheekPoresText.gameObject.name + ", ";
+
+        if (rCheekPigmentationText.text.Equals("-1"))
+            uncheckingStatus += rCheekPigmentationText.gameObject.name + ", ";
+
+        if (rCheekPoresText.text.Equals("-1"))
+            uncheckingStatus += rCheekPoresText.gameObject.name + ", ";
+
+        if (lipDrynessText.text.Equals("-1"))
+            uncheckingStatus += lipDrynessText.gameObject.name + ", ";
+
+        if (chinPtosisText.text.Equals("-1"))
+            uncheckingStatus += chinPtosisText.gameObject.name + ", ";
+
+        if (uncheckingStatus == "")
+        {
+            Debug.Log("true checking");
+            JsonSerialObj.GetComponent<JsonSerialization>().SaveJson();
+            panelManagerObj.GetComponent<PanelManager>().OnSaveCompleteInfo();
+        }
+        else
+        {
+            uncheckingStatusText.text += uncheckingStatus;
+            panelManagerObj.GetComponent<PanelManager>().OnSaveInfo();
+        }
+    }
+
+    public void InitStatusText()
+    {
+        // Initialize text values to -1
+        foreheadWrinkleText.text = "-1";
+        foreheadPigmentationText.text = "-1";
+        glabellusWrinkleText.text = "-1";
+        lPeriocularWrinkleText.text = "-1";
+        rPeriocularWrinkleText.text = "-1";
+        lCheekPigmentationText.text = "-1";
+        lCheekPoresText.text = "-1";
+        rCheekPigmentationText.text = "-1";
+        rCheekPoresText.text = "-1";
+        lipDrynessText.text = "-1";
+        chinPtosisText.text = "-1";
+    }
+
     public void LoadStatusText(List<ScoreData> scoreDatas)
     {
+        InitStatusText();
+
+
         foreach (ScoreData scoreData in scoreDatas)
         {
             foreach (var score in scoreData.scores)
