@@ -61,17 +61,26 @@ public class RectangleData
 [System.Serializable]
 public class SerializableDict
 {
-    public List<ImageData> imageDataList = new List<ImageData>();
+    public string userName = "";
     public PimpleData pimpleData;
     public List<ScoreData> scoreDatas = new List<ScoreData>();
+    public List<ImageData> imageDataList = new List<ImageData>();
 }
 
+[System.Serializable]
+public class SerializablePimpleDict
+{
+    public string userName = "";
+    public PimpleData pimpleData;
+    
+}
 
 
 public class JsonSerialization : MonoBehaviour
 {
     public GameObject jsonParsingObj;
     public GameObject parentPortraits;
+    public GameObject loginManagerObj;
 
 
     private const float PIXEL_WIDTH = 2136f;
@@ -209,7 +218,7 @@ public class JsonSerialization : MonoBehaviour
     {
         SerializableDict serializableDict = new SerializableDict
         {
-            
+            userName = loginManagerObj.GetComponent<SaveUserData>().idField.text
         };
 
         foreach (var kvp in rectangleDict)
@@ -307,6 +316,33 @@ public class JsonSerialization : MonoBehaviour
             }
         }
     }
+    public void SavePimpleAndUserName()
+    {
+        SerializablePimpleDict serializableDict = new SerializablePimpleDict
+        {
+            userName = loginManagerObj.GetComponent<SaveUserData>().idField.text
+        };
+
+        PimpleData pimpleData = new PimpleData();
+        PopulatePimpleDataFrom(faceImage_f, pimpleData);
+        PopulatePimpleDataFrom(faceImage_l30, pimpleData);
+        PopulatePimpleDataFrom(faceImage_r30, pimpleData);
+        serializableDict.pimpleData = pimpleData;
+
+        string json = JsonUtility.ToJson(serializableDict, true);
+        string currentPath = FileBrowserObj.GetComponent<FileBrowserTest>().filePath;
+
+        // Create the 'jsons' directory path.
+        string jsonsDirectoryPath = Path.Combine(currentPath, "jsons");
+        Directory.CreateDirectory(jsonsDirectoryPath);  // Create the directory if it doesn't exist, otherwise do nothing.
+
+        // Save the .json file inside the 'jsons' directory.
+        string jsonFilePath = Path.Combine(jsonsDirectoryPath, "pimple" + "_" + loginManagerObj.GetComponent<SaveUserData>().idField.text + ".json");
+        File.WriteAllText(jsonFilePath, json);
+
+        Debug.Log("Pimple and userName save complete.");
+    }
+
 
     public void OffSaveCompleteImage()
     {

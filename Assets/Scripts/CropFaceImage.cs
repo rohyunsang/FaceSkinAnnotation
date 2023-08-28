@@ -7,6 +7,7 @@ public class CropFaceImage : MonoBehaviour
     public GameObject jsonParsingManagerObj;
     public List<Info> parsedInfo = new List<Info>();
     public List<Texture2D> imageDatas = new List<Texture2D>();
+    public GameObject statusPanel;
 
     public GameObject foreheadSpawn;
     public GameObject glabellusSpawn;
@@ -57,6 +58,11 @@ public class CropFaceImage : MonoBehaviour
             GameObject croppedImageObj = new GameObject("" + info.id + " " + info.region_name[i]);
             RawImage rawImage = croppedImageObj.AddComponent<RawImage>();
             rawImage.texture = croppedTexture;
+
+            // CaptureArea 함수 내부의 croppedImageObj 생성 부분 아래에 추가
+            Button btn = croppedImageObj.AddComponent<Button>();
+            int currentI = i;
+            btn.onClick.AddListener(() => SpawnCenteredObject(croppedTexture, info.region_name[currentI]));
 
             // 잘라낸 이미지의 RectTransform 설정
             RectTransform croppedRect = croppedImageObj.GetComponent<RectTransform>();
@@ -119,6 +125,37 @@ public class CropFaceImage : MonoBehaviour
             }
         }
 
+    }
+
+    // 새로운 함수 추가
+    private void SpawnCenteredObject(Texture2D texture, string regionName)
+    {
+        GameObject centeredObj = new GameObject("Copy " + texture.name);
+        centeredObj.transform.SetParent(statusPanel.transform, false);
+
+        RawImage rawImage = centeredObj.AddComponent<RawImage>();
+        rawImage.texture = texture;
+
+        // Set scale based on region name
+        if (regionName == "forehead" || regionName == "chin")
+        {
+            centeredObj.transform.localScale = new Vector2(1, 1);
+        }
+        else
+        {
+            centeredObj.transform.localScale = new Vector2(2, 2);
+        }
+
+        // Set position to screen center
+        RectTransform rectTransform = centeredObj.GetComponent<RectTransform>();
+        rectTransform.anchoredPosition = Vector2.zero;
+
+        // Set the width and height to match the original texture
+        rectTransform.sizeDelta = new Vector2(texture.width, texture.height);
+
+        // Add button to destroy itself upon clicking
+        Button btn = centeredObj.AddComponent<Button>();
+        btn.onClick.AddListener(() => Destroy(centeredObj));
     }
 
     public void ClearCropImage()

@@ -42,6 +42,8 @@ public class FileBrowserTest : MonoBehaviour
                     foreach (string jsonFile in jsonFiles)
                     {
                         Debug.Log("Processing JSON file: " + Path.GetFileName(jsonFile));  // JSON 파일 이름 디버그
+                        if (Path.GetFileName(jsonFile).Contains("pimple"))
+                            continue;
                         byte[] bytes = FileBrowserHelpers.ReadBytesFromFile(jsonFile);
                         jsonStrings[Path.GetFileName(jsonFile)] = System.Text.Encoding.UTF8.GetString(bytes);
 

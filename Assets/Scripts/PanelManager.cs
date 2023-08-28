@@ -20,8 +20,18 @@ public class PanelManager : MonoBehaviour
 
     public GameObject SaveInfo;
     public GameObject SaveCompleteInfo;
+    public GameObject pimpleSaveCompleteInfo;
 
     public Text uncheckingStatusText;
+
+    public void OnPimpleSaveCompleteInfo()
+    {
+        pimpleSaveCompleteInfo.SetActive(true);
+    }
+    public void OffPimpleSaveCompleteInfo()
+    {
+        pimpleSaveCompleteInfo.SetActive(false);
+    }
 
     public void OffSaveInfo()
     {
