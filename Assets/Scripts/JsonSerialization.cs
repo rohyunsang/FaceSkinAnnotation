@@ -15,14 +15,14 @@ public class PimpleEntry
 [System.Serializable]
 public class PimpleData
 {
-    public List<PimpleEntry> _f = new List<PimpleEntry>();
-    public List<PimpleEntry> _r30 = new List<PimpleEntry>();
-    public List<PimpleEntry> _l30 = new List<PimpleEntry>();
+    public List<PimpleEntry> _F = new List<PimpleEntry>();
+    public List<PimpleEntry> _R30 = new List<PimpleEntry>();
+    public List<PimpleEntry> _L30 = new List<PimpleEntry>();
     public void Clear()
     {
-        _f.Clear();
-        _r30.Clear();
-        _l30.Clear();
+        _F.Clear();
+        _R30.Clear();
+        _L30.Clear();
     }
 }
 [System.Serializable]
@@ -287,13 +287,13 @@ public class JsonSerialization : MonoBehaviour
         switch (go.name)
         {
             case "faceImage_f":
-                targetList = pimpleData._f;
+                targetList = pimpleData._F;
                 break;
             case "faceImage_r30":
-                targetList = pimpleData._r30;
+                targetList = pimpleData._R30;
                 break;
             case "faceImage_l30":
-                targetList = pimpleData._l30;
+                targetList = pimpleData._L30;
                 break;
             default:
                 Debug.LogWarning("Unknown GameObject name: " + go.name);

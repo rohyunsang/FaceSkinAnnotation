@@ -26,22 +26,22 @@ public class ObjInstantManager : MonoBehaviour
 
     public void PimpleInstant(PimpleData pimpleData)
     {
-        // Instantiate pimples for _f
-        if (pimpleData._f != null && pimpleData._f.Any())
+        // Instantiate pimples for _F
+        if (pimpleData._F != null && pimpleData._F.Any())
         {
-            InstantiatePimples(pimpleData._f, spawnPoint_f);
+            InstantiatePimples(pimpleData._F, spawnPoint_f);
         }
 
-        // Instantiate pimples for _l30
-        if (pimpleData._l30 != null && pimpleData._l30.Any())
+        // Instantiate pimples for _R30
+        if (pimpleData._R30 != null && pimpleData._R30.Any())
         {
-            InstantiatePimples(pimpleData._l30, spawnPoint_l30);
+            InstantiatePimples(pimpleData._R30, spawnPoint_r30);
         }
 
-        // Instantiate pimples for _r30
-        if (pimpleData._r30 != null && pimpleData._r30.Any())
+        // Instantiate pimples for _L30
+        if (pimpleData._L30 != null && pimpleData._L30.Any())
         {
-            InstantiatePimples(pimpleData._r30, spawnPoint_r30);
+            InstantiatePimples(pimpleData._L30, spawnPoint_r30);
         }
     }
 
