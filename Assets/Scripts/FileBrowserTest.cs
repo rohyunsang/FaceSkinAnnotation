@@ -55,11 +55,6 @@ public class FileBrowserTest : MonoBehaviour
                     {
                         string fileName = Path.GetFileName(jpgFile);
 
-                        if (fileName.Contains("phone") || fileName.Contains("pad"))
-                        {
-                            continue;  // "phone" 또는 "pad"가 이름에 포함되면 처리하지 않고 건너뜁니다.
-                        }
-
                         byte[] bytes = FileBrowserHelpers.ReadBytesFromFile(jpgFile);
                         jsonManager.GetComponent<JsonParsing>().MakeImageStringArray(bytes);
 

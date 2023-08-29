@@ -25,10 +25,6 @@ public class CropFaceImage : MonoBehaviour
         int idx = 0;
         foreach (Info info in parsedInfo)  // total 7
         {
-            if (info.id.Contains("phone") || info.id.Contains("pad"))
-            {
-                continue;  // Skip the current iteration and move to the next one
-            }
             CaptureArea(imageDatas[idx], info);
             idx++;
         }

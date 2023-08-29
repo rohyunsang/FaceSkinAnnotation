@@ -235,7 +235,7 @@ public class JsonParsing : MonoBehaviour
 
         GameObject portraitInstanceC = Instantiate(portraitPrefab, scrollView.transform);
 
-        portraitInstanceC.name = parsedInfo[12].id;
+        portraitInstanceC.name = parsedInfo[6].id;
         portraitInstanceC.GetComponent<Image>().sprite = Sprite.Create(imageDatas[6], new Rect(0, 0, imageDatas[6].width, imageDatas[6].height), Vector2.one * 0.5f);
 
     }
@@ -261,9 +261,9 @@ public class JsonParsing : MonoBehaviour
         faceImage_l30.gameObject.SetActive(false);
         faceImage_f.gameObject.SetActive(false);
 
-        if(portraitName.Contains("r30")) 
+        if(portraitName.Contains("R30")) 
             faceImage_r30.gameObject.SetActive(true);
-        else if (portraitName.Contains("l30")) 
+        else if (portraitName.Contains("L30")) 
             faceImage_l30.gameObject.SetActive(true);
         else 
             faceImage_f.gameObject.SetActive(true);

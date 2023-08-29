@@ -75,17 +75,17 @@ public class ObjInstantManager : MonoBehaviour
         foreach (Info info in parsedInfo)
         {
             RawImage currentSpawnPoint = spawnPoint_empty; // Default spawn point
-            if (info.id.Contains("_l30"))
+            if (info.id.Contains("_L30"))
             {
                 currentSpawnPoint = spawnPoint_l30;
             }
-            else if (info.id.Contains("_r30"))
+            else if (info.id.Contains("_R30"))
             {
                 currentSpawnPoint = spawnPoint_r30;
             }
-            else if (info.id.Contains("_f"))
+            else if (info.id.Contains("_F"))
             {
-                if (info.id.Contains("_f_") || info.id.Contains("pad") || info.id.Contains("phone"))
+                if (info.id.Contains("_Fb") || info.id.Contains("Ft"))
                 {
 
                 }

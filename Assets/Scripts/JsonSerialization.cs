@@ -333,11 +333,11 @@ public class JsonSerialization : MonoBehaviour
         string currentPath = FileBrowserObj.GetComponent<FileBrowserTest>().filePath;
 
         // Create the 'jsons' directory path.
-        string jsonsDirectoryPath = Path.Combine(currentPath, "jsons");
+        string jsonsDirectoryPath = Path.Combine(currentPath, "pimples");
         Directory.CreateDirectory(jsonsDirectoryPath);  // Create the directory if it doesn't exist, otherwise do nothing.
 
         // Save the .json file inside the 'jsons' directory.
-        string jsonFilePath = Path.Combine(jsonsDirectoryPath, "pimple" + "_" + loginManagerObj.GetComponent<SaveUserData>().idField.text + ".json");
+        string jsonFilePath = Path.Combine(jsonsDirectoryPath, "pimple" + ".json");
         File.WriteAllText(jsonFilePath, json);
 
         Debug.Log("Pimple and userName save complete.");
