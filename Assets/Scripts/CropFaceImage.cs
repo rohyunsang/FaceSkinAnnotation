@@ -36,7 +36,8 @@ public class CropFaceImage : MonoBehaviour
         for (int i = 0; i < numRectangles; i++)
         {
             Debug.Log(numRectangles);
-
+            if (info.point[i * 4 + 0] < 0)
+                continue;
             int x1 = info.point[i * 4 + 0];
             int y1 = 3216 - info.point[i * 4 + 1];
             int x2 = info.point[i * 4 + 2];

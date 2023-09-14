@@ -41,7 +41,7 @@ public class ScoreData
 public class RectangleEntry
 {
     public string name;
-    public List<int> points = new List<int>();
+    public List<string> points = new List<string>();
 }
 
 [System.Serializable]
@@ -135,11 +135,21 @@ public class JsonSerialization : MonoBehaviour
 
                 RectangleEntry entry = new RectangleEntry();
                 entry.name = child.name;
-
-                entry.points.Add(originalX1);
-                entry.points.Add(originalY1);
-                entry.points.Add(originalX2);
-                entry.points.Add(originalY2);
+                if(originalX1 < 0)
+                {
+                    entry.points.Add("None");
+                    entry.points.Add("None");
+                    entry.points.Add("None");
+                    entry.points.Add("None");
+                }
+                else
+                {
+                    entry.points.Add(originalX1.ToString());
+                    entry.points.Add(originalY1.ToString());
+                    entry.points.Add(originalX2.ToString());
+                    entry.points.Add(originalY2.ToString());
+                }
+                
 
                 // Check if an entry with the same name exists
                 RectangleEntry existingEntry = rectangleDict[currentId].Find(e => e.name == entry.name);
@@ -192,10 +202,21 @@ public class JsonSerialization : MonoBehaviour
             RectangleEntry entry = new RectangleEntry();
             entry.name = child.name;
 
-            entry.points.Add(originalX1);
-            entry.points.Add(originalY1);
-            entry.points.Add(originalX2);
-            entry.points.Add(originalY2);
+
+            if (originalX1 < 0)
+            {
+                entry.points.Add("None");
+                entry.points.Add("None");
+                entry.points.Add("None");
+                entry.points.Add("None");
+            }
+            else
+            {
+                entry.points.Add(originalX1.ToString());
+                entry.points.Add(originalY1.ToString());
+                entry.points.Add(originalX2.ToString());
+                entry.points.Add(originalY2.ToString());
+            }
 
             // Check if an entry with the same name exists
             RectangleEntry existingEntry = rectangleDict[currentId].Find(e => e.name == entry.name);

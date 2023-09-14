@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class RectangleEntryFile
 {
     public string name;
-    public List<int> points;
+    public List<string> points;
 }
 
 [System.Serializable]
@@ -286,7 +286,15 @@ public class JsonParsing : MonoBehaviour
             foreach (var rectangleEntry in imageData.rectangleEntries)
             {
                 imageInfo.region_name[i] = rectangleEntry.name;
-                imageInfo.point.AddRange(rectangleEntry.points);
+                List<int> list = new List<int>();
+                foreach (string s in rectangleEntry.points)
+                {
+                    if(s.Contains("None"))
+                        list.Add(-1);
+                    else
+                        list.Add(int.Parse(s));
+                }
+                imageInfo.point.AddRange(list);
                 i++;
             }
 
