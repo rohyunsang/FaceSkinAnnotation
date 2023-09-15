@@ -44,9 +44,10 @@ public class FileBrowserTest : MonoBehaviour
                         Debug.Log("Processing JSON file: " + Path.GetFileName(jsonFile));  // JSON 파일 이름 디버그
                         if (Path.GetFileName(jsonFile).Contains("pimple"))
                             continue;
+                        if (Path.GetFileName(jsonFile).Contains("line"))
+                            continue;
                         byte[] bytes = FileBrowserHelpers.ReadBytesFromFile(jsonFile);
                         jsonStrings[Path.GetFileName(jsonFile)] = System.Text.Encoding.UTF8.GetString(bytes);
-
                     }
 
                     // 모든 .jpg 파일 처리
