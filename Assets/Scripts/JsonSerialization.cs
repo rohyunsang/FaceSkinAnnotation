@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using Unity.VisualScripting.AssemblyQualifiedNameParser;
@@ -351,14 +352,23 @@ public class JsonSerialization : MonoBehaviour
         serializableDict.pimpleData = pimpleData;
 
         string json = JsonUtility.ToJson(serializableDict, true);
-        string currentPath = FileBrowserObj.GetComponent<FileBrowserTest>().filePath;
+        string currentFileName = FileBrowserObj.GetComponent<FileBrowserTest>().fileName;
+        string[] parts = currentFileName.Split('_');
+        string fileIndex = parts[0];
 
-        // Create the 'jsons' directory path.
-        string jsonsDirectoryPath = Path.Combine(currentPath, "pimples");
-        Directory.CreateDirectory(jsonsDirectoryPath);  // Create the directory if it doesn't exist, otherwise do nothing.
+        // Get the desktop path.
+        string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
 
-        // Save the .json file inside the 'jsons' directory.
-        string jsonFilePath = Path.Combine(jsonsDirectoryPath, "pimple" + ".json");
+        // Create the 'pimples' directory path.
+        string pimplesDirectoryPath = Path.Combine(desktopPath, "pimples");
+        Directory.CreateDirectory(pimplesDirectoryPath);  // Create the directory if it doesn't exist.
+
+        // Create the 'index' directory inside 'pimples'.
+        string indexDirectoryPath = Path.Combine(pimplesDirectoryPath, fileIndex);
+        Directory.CreateDirectory(indexDirectoryPath);  // Create the directory if it doesn't exist.
+
+        // Save the .json file inside the 'index' directory.
+        string jsonFilePath = Path.Combine(indexDirectoryPath, "pimple" + ".json");
         File.WriteAllText(jsonFilePath, json);
 
         Debug.Log("Pimple and userName save complete.");

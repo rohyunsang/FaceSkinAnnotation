@@ -14,6 +14,7 @@ public class FileBrowserTest : MonoBehaviour
     public GameObject jsonManager;
 
     public string filePath = "";
+    public string fileName = "";
 
     public void ShowFileBrowser()
     {
@@ -54,7 +55,7 @@ public class FileBrowserTest : MonoBehaviour
                     List<string> jpgFiles = GetAllFilesInDirectory(FileBrowser.Result[i], "*.jpg");
                     foreach (string jpgFile in jpgFiles)
                     {
-                        string fileName = Path.GetFileName(jpgFile);
+                        fileName = Path.GetFileName(jpgFile);
 
                         byte[] bytes = FileBrowserHelpers.ReadBytesFromFile(jpgFile);
                         jsonManager.GetComponent<JsonParsing>().MakeImageStringArray(bytes);
